@@ -1,6 +1,7 @@
 import { User } from "../../enterprise/entities/user";
 import type { HashGenerator } from "../cryptography/hash-generator";
 import type { UserRepository } from "../repositories/user-repository";
+import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
 
 interface CreateAccountUseCaseRequest {
   email: string;
@@ -19,7 +20,7 @@ export class CreateAccountUseCase {
     );
 
     if (emailAlreadyExists) {
-      throw new Error("Email already in use.");
+      throw new UserAlreadyExistsError();
     }
 
     const hashedPassword = await this.hashGenerator.hash(input.password);
