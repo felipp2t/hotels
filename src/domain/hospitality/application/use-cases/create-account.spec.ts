@@ -54,7 +54,7 @@ describe('Create Account', () => {
       birthDate: new Date('1990-01-01'),
     })
 
-    expect(result).resolves.toEqual(left(new UserAlreadyExistsError()))
+    await expect(result).resolves.toEqual(left(new UserAlreadyExistsError()))
   })
 
   it('should hash user password upon registration', async () => {
@@ -81,7 +81,7 @@ describe('Create Account', () => {
       birthDate: new Date('1990-01-01'),
     })
 
-    expect(result).resolves.toEqual(left(new NameTooShortError()))
+    await expect(result).resolves.toEqual(left(new NameTooShortError()))
   })
 
   it('should not be able to create a new account with a birth date in the future', async () => {
@@ -93,7 +93,7 @@ describe('Create Account', () => {
       birthDate: new Date('2090-01-01'),
     })
 
-    expect(result).resolves.toEqual(left(new BirthDateInFutureError()))
+    await expect(result).resolves.toEqual(left(new BirthDateInFutureError()))
   })
 
   it('should not be able to create a new account with a name shorter than 3 characters', async () => {
@@ -105,7 +105,7 @@ describe('Create Account', () => {
       birthDate: new Date('1990-01-01'),
     })
 
-    expect(result).resolves.toEqual(left(new NameTooShortError()))
+    await expect(result).resolves.toEqual(left(new NameTooShortError()))
   })
 
   it('should not be able to create a new account with a birth date in the future', async () => {
@@ -117,6 +117,6 @@ describe('Create Account', () => {
       birthDate: new Date('2090-01-01'),
     })
 
-    expect(result).resolves.toEqual(left(new BirthDateInFutureError()))
+    await expect(result).resolves.toEqual(left(new BirthDateInFutureError()))
   })
 })
