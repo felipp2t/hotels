@@ -3,6 +3,7 @@ import type { UseCaseError } from '@/core/errors/use-case-error'
 import { User } from '../../enterprise/entities/user'
 import type { HashGenerator } from '../cryptography/hash-generator'
 import type { UserRepository } from '../repositories/user-repository'
+import { BirthDateInFutureError } from './errors/birth-date-in-future-error'
 import { NameTooShortError } from './errors/name-too-short-error'
 import { TaxIdAlreadyExistsError } from './errors/tax-id-already-exists-error'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
@@ -47,6 +48,10 @@ export class CreateAccountUseCase {
       && (!input.name || input.name.trim().length < 3)
     ) {
       return left(new NameTooShortError())
+    }
+
+    if (input.birthDate >= new Date()) {
+      return left(new BirthDateInFutureError())
     }
 
     const hashedPassword = await this.hashGenerator.hash(input.password)
