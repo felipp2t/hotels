@@ -8,7 +8,7 @@
     "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
     "strict": true,
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "esModuleInterop": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
@@ -17,8 +17,9 @@
       "@/*": ["./src/*"],
       "@core/*": ["./src/core/*"],
       "@domain/*": ["./src/domain/*"],
-      "@infra/*": ["./src/infra/*"]
+      "@infra/*": ["./src/infra/*"],
+      "@test/*": ["./test/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
