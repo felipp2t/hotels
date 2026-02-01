@@ -1,3 +1,5 @@
+import { type Either, left, right } from "@/core/either";
+import type { UseCaseError } from "@/core/errors/use-case-error";
 import { User } from "../../enterprise/entities/user";
 import type { HashGenerator } from "../cryptography/hash-generator";
 import type { UserRepository } from "../repositories/user-repository";
@@ -8,19 +10,23 @@ interface CreateAccountUseCaseRequest {
   password: string;
 }
 
+type CreateAccountUseCaseResponse = Either<UseCaseError, { userId: string }>;
+
 export class CreateAccountUseCase {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly hashGenerator: HashGenerator
   ) {}
 
-  async execute(input: CreateAccountUseCaseRequest) {
+  async execute(
+    input: CreateAccountUseCaseRequest
+  ): Promise<CreateAccountUseCaseResponse> {
     const emailAlreadyExists = await this.userRepository.findByEmail(
       input.email
     );
 
     if (emailAlreadyExists) {
-      throw new UserAlreadyExistsError();
+      return left(new UserAlreadyExistsError());
     }
 
     const hashedPassword = await this.hashGenerator.hash(input.password);
@@ -32,8 +38,8 @@ export class CreateAccountUseCase {
 
     await this.userRepository.save(user);
 
-    return {
+    return right({
       userId: user.id.toString(),
-    };
+    });
   }
 }
