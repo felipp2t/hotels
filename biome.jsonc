@@ -5,6 +5,9 @@
     "rules": {
       "style": {
         "noParameterProperties": "off"
+      },
+      "suspicious": {
+        "useAwait": "off"
       }
     }
   }
