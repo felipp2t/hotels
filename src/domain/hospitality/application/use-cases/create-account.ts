@@ -8,6 +8,9 @@ import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 interface CreateAccountUseCaseRequest {
   email: string
   password: string
+  taxId: string
+  name: string
+  birthDate: Date
 }
 
 type CreateAccountUseCaseResponse = Either<UseCaseError, { userId: string }>
@@ -34,6 +37,9 @@ export class CreateAccountUseCase {
     const user = User.create({
       email: input.email,
       password: hashedPassword,
+      taxId: input.taxId,
+      name: input.name,
+      birthDate: input.birthDate,
     })
 
     await this.userRepository.save(user)
