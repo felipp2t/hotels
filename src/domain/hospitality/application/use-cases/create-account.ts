@@ -3,6 +3,7 @@ import type { UseCaseError } from '@/core/errors/use-case-error'
 import { User } from '../../enterprise/entities/user'
 import type { HashGenerator } from '../cryptography/hash-generator'
 import type { UserRepository } from '../repositories/user-repository'
+import { TaxIdAlreadyExistsError } from './errors/tax-id-already-exists-error'
 import { UserAlreadyExistsError } from './errors/user-already-exists-error'
 
 interface CreateAccountUseCaseRequest {
@@ -30,6 +31,14 @@ export class CreateAccountUseCase {
 
     if (emailAlreadyExists) {
       return left(new UserAlreadyExistsError())
+    }
+
+    const taxIdAlreadyExists = await this.userRepository.findByTaxId(
+      input.taxId
+    )
+
+    if (taxIdAlreadyExists) {
+      return left(new TaxIdAlreadyExistsError())
     }
 
     const hashedPassword = await this.hashGenerator.hash(input.password)
